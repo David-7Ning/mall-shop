@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.loadbalancer: DEBUG
+
+spring:
+  application:
+    name: mall-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+        - id: mall-user
+          uri: lb://mall-user
+          predicates:
+            - Path=/api/user/**,/api/address/**
+          filters:
+            - StripPrefix=1
+        - id: mall-product
+          uri: lb://mall-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - StripPrefix=1
+        - id: mall-cart
+          uri: lb://mall-cart
+          predicates:
+            - Path=/api/cart/**
+          filters:
+            - StripPrefix=1
+        - id: mall-order
+          uri: lb://mall-order
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - StripPrefix=1
+        - id: mall-file
+          uri: lb://mall-file
+          predicates:
+            - Path=/api/file/**
+          filters:
+            - StripPrefix=1
+        - id: mall-admin
+          uri: lb://mall-admin
+          predicates:
+            - Path=/api/admin/**
+          filters:
+            - StripPrefix=1
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true

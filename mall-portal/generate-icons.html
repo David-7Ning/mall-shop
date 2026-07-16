@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商城 TabBar 图标生成器</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .icons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .icon-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .icon-item canvas {
+            width: 81px;
+            height: 81px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        .icon-item p {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #666;
+        }
+        .download-btn {
+            background: #ff6700;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .download-btn:hover {
+            background: #e55d00;
+        }
+        .batch-download {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .batch-download:hover {
+            background: #0066DD;
+        }
+        .instructions {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .instructions h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>🛒 商城 TabBar 图标生成器</h1>
+    
+    <div class="icons-grid" id="iconsGrid"></div>
+    
+    <button class="batch-download" onclick="downloadAll()">
+        ⬇️ 一键下载全部 8 个图标
+    </button>
+    
+    <div class="instructions">
+        <h2>📖 使用说明</h2>
+        <ol>
+            <li>点击每个图标下方的按钮单独下载，或点击上方按钮批量下载</li>
+            <li>下载后会得到 8 个 PNG 文件</li>
+            <li>将这 8 个文件放入 <code>static/tabbar/</code> 目录</li>
+            <li>确保 <code>pages.json</code> 中 tabBar 配置正确</li>
+        </ol>
+    </div>
+
+<script>
+// 图标配置：名称、颜色、绘制函数
+const icons = [
+    { name: 'home', label: '首页', color: '#999999', draw: drawHome },
+    { name: 'home-active', label: '首页(选中)', color: '#ff6700', draw: drawHome },
+    { name: 'category', label: '分类', color: '#999999', draw: drawCategory },
+    { name: 'category-active', label: '分类(选中)', color: '#ff6700', draw: drawCategory },
+    { name: 'cart', label: '购物车', color: '#999999', draw: drawCart },
+    { name: 'cart-active', label: '购物车(选中)', color: '#ff6700', draw: drawCart },
+    { name: 'user', label: '我的', color: '#999999', draw: drawUser },
+    { name: 'user-active', label: '我的(选中)', color: '#ff6700', draw: drawUser }
+];
+
+// 绘制首页图标（房子）
+function drawHome(ctx, color) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    // 屋顶
+    ctx.beginPath();
+    ctx.moveTo(15, 40);
+    ctx.lineTo(40, 18);
+    ctx.lineTo(65, 40);
+    ctx.stroke();
+    
+    // 房屋主体
+    ctx.beginPath();
+    ctx.rect(22, 38, 36, 28);
+    ctx.stroke();
+    
+    // 门
+    ctx.beginPath();
+    ctx.rect(35, 48, 10, 18);
+    ctx.stroke();
+}
+
+// 绘制分类图标（网格）
+function drawCategory(ctx, color) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    
+    // 第一个方块
+    ctx.beginPath();
+    ctx.rect(16, 16, 24, 24);
+    ctx.stroke();
+    
+    // 第二个方块
+    ctx.beginPath();
+    ctx.rect(46, 16, 24, 24);
+    ctx.stroke();
+    
+    // 第三个方块
+    ctx.beginPath();
+    ctx.rect(16, 46, 24, 24);
+    ctx.stroke();
+    
+    // 第四个方块
+    ctx.beginPath();
+    ctx.rect(46, 46, 24, 24);
+    ctx.stroke();
+}
+
+// 绘制购物车图标
+function drawCart(ctx, color) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    // 购物车主体
+    ctx.beginPath();
+    ctx.moveTo(14, 26);
+    ctx.lineTo(22, 26);
+    ctx.lineTo(28, 50);
+    ctx.lineTo(62, 50);
+    ctx.lineTo(68, 30);
+    ctx.lineTo(24, 30);
+    ctx.stroke();
+    
+    // 轮子1
+    ctx.beginPath();
+    ctx.arc(34, 60, 5, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    
+    // 轮子2
+    ctx.beginPath();
+    ctx.arc(56, 60, 5, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+// 绘制用户图标（人形）
+function drawUser(ctx, color) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    
+    // 头部（圆形）
+    ctx.beginPath();
+    ctx.arc(40, 25, 12, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    // 身体
+    ctx.beginPath();
+    ctx.moveTo(18, 68);
+    ctx.quadraticCurveTo(18, 45, 40, 42);
+    ctx.quadraticCurveTo(62, 45, 62, 68);
+    ctx.stroke();
+}
+
+// 初始化：生成所有图标
+function initIcons() {
+    const grid = document.getElementById('iconsGrid');
+    
+    icons.forEach((icon, index) => {
+        const item = document.createElement('div');
+        item.className = 'icon-item';
+        
+        // 创建 canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = 81;
+        canvas.height = 81;
+        const ctx = canvas.getContext('2d');
+        
+        // 绘制图标
+        icon.draw(ctx, icon.color);
+        
+        // 添加标签和按钮
+        item.innerHTML = `
+            <p><strong>${icon.label}</strong></p>
+            <p style="color:${icon.color}">● ${icon.color}</p>
+            <button class="download-btn" onclick="downloadIcon(${index})">
+                下载 ${icon.name}.png
+            </button>
+        `;
+        
+        item.insertBefore(canvas, item.firstChild);
+        grid.appendChild(item);
+    });
+}
+
+// 下载单个图标
+function downloadIcon(index) {
+    const icon = icons[index];
+    const canvas = document.querySelectorAll('canvas')[index];
+    
+    const link = document.createElement('a');
+    link.download = `${icon.name}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+}
+
+// 批量下载所有图标
+async function downloadAll() {
+    for (let i = 0; i < icons.length; i++) {
+        downloadIcon(i);
+        await new Promise(resolve => setTimeout(resolve, 300)); // 间隔300ms避免浏览器拦截
+    }
+    alert('✅ 已开始下载 8 个图标文件！\n请检查浏览器的下载文件夹。');
+}
+
+// 页面加载完成后初始化
+initIcons();
+</script>
+</body>
+</html>

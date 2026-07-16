@@ -1,0 +1,46 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: mall-order
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    # OpenFeign配置
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 5000
+            read-timeout: 5000
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mall_order?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password:
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: manual  # 手动确认消息
+        concurrency: 5
+        max-concurrency: 10
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
